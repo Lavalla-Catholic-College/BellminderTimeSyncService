@@ -34,8 +34,6 @@ Public Class BellminderTimeSync
         Dim callback As New TimerCallback(AddressOf TimerElapsed)
         timer = New Timer(callback, Nothing, 0, interval)
 
-        SendTimeDate()
-
     End Sub
 
     Protected Overrides Sub OnStop()
