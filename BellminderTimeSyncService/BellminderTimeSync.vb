@@ -28,6 +28,8 @@ Public Class BellminderTimeSync
 
         WriteLog(String.Format("Started Bellminder Time Sync. COM port is {0} and baud rate is {1} with a refresh rate of {2}", comPort, baudRate, tmrSync.Interval), EventLogEntryType.Information)
 
+        tmrSync.Start()
+
         SendTimeDate()
 
     End Sub
@@ -129,6 +131,10 @@ Public Class BellminderTimeSync
 
         ' Update the window and tray icon to say it was successful
         WriteLog(String.Format("Last Synchronized {0}:{1}:{2}", d.Hour.ToString, d.Minute.ToString, d.Second.ToString), EventLogEntryType.Information)
+    End Sub
+
+    Public Sub GetCurrentTime()
+        ' 1B 58
     End Sub
 
     Private Sub tmrSync_Tick(sender As Object, e As EventArgs) Handles tmrSync.Tick
