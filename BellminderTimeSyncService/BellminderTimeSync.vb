@@ -28,7 +28,7 @@ Public Class BellminderTimeSync
         baudRate = LoadSettings().baudRate
         interval = LoadSettings().interval
 
-        WriteLog(String.Format("Started Bellminder Time Sync. COM port is {0} and baud rate is {1} with a refresh rate of {2}", comPort, baudRate, tmrSync.Interval), EventLogEntryType.Information)
+        WriteLog(String.Format("Started Bellminder Time Sync. COM port is {0} and baud rate is {1} with a refresh rate of {2}", comPort, baudRate, interval), EventLogEntryType.Information)
 
         ' Initialize the timer to fire every 10 minutes (600000 milliseconds)
         Dim callback As New TimerCallback(AddressOf TimerElapsed)
