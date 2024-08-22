@@ -9,6 +9,7 @@ Public Class BellminderTimeSync
     Private logger As New EventLog
     Private comPort As Integer
     Private baudRate As Integer
+    Private interval As Integer
 
     Protected Overrides Sub OnStart(ByVal args() As String)
         ' Add code here to start your service. This method should set things
@@ -23,8 +24,9 @@ Public Class BellminderTimeSync
 
         comPort = LoadSettings().comPort
         baudRate = LoadSettings().baudRate
+        tmrSync.Interval = LoadSettings().interval
 
-        WriteLog(String.Format("Started Bellminder Time Sync. COM port is {0} and baud rate is {1}", comPort, baudRate), EventLogEntryType.Information)
+        WriteLog(String.Format("Started Bellminder Time Sync. COM port is {0} and baud rate is {1} with a refresh rate of {2}", comPort, baudRate, tmrSync.Interval), EventLogEntryType.Information)
 
         SendTimeDate()
 
@@ -133,7 +135,7 @@ Public Class BellminderTimeSync
         SendTimeDate()
     End Sub
 
-    Public Function LoadSettings() As (comPort As Integer, baudRate As Integer)
+    Public Function LoadSettings() As (comPort As Integer, baudRate As Integer, interval As Integer)
         Dim RegistryKeyPath As String = "SOFTWARE\BellminderTimeSync"
 
         Try
@@ -142,8 +144,9 @@ Public Class BellminderTimeSync
                     If key IsNot Nothing Then
                         comPort = CInt(key.GetValue("COMPort", 1))
                         baudRate = CInt(key.GetValue("BaudRate", 9600))
+                        interval = CInt(key.GetValue("Interval", 1000 * 60 * 10)) ' 10 minutes
                     Else
-                        WriteLog("Unable to load registry key for settings. Defaulting to COM Port 1 and 9600 Baud Rate", EventLogEntryType.Warning)
+                        WriteLog("Unable to load registry key for settings. Defaulting to COM Port 1 and 9600 Baud Rate with a refresh rate of 60000", EventLogEntryType.Warning)
                     End If
                 End Using
             End Using
@@ -152,7 +155,7 @@ Public Class BellminderTimeSync
             WriteLog("Error loading settings: " & ex.Message, EventLogEntryType.Error)
         End Try
 
-        Return (comPort, baudRate)
+        Return (comPort, baudRate, interval)
     End Function
 
 End Class
