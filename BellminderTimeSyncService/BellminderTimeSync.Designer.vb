@@ -1,11 +1,11 @@
 ﻿Imports System.ServiceProcess
 
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class BellminderTimeSync
     Inherits System.ServiceProcess.ServiceBase
 
     'UserService overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -17,8 +17,8 @@ Partial Class BellminderTimeSync
     End Sub
 
     ' The main entry point for the process
-    <MTAThread()> _
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <MTAThread()>
+    <System.Diagnostics.DebuggerNonUserCode()>
     Shared Sub Main()
         Dim ServicesToRun() As System.ServiceProcess.ServiceBase
 
@@ -39,17 +39,10 @@ Partial Class BellminderTimeSync
     ' NOTE: The following procedure is required by the Component Designer
     ' It can be modified using the Component Designer.  
     ' Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
         Me.evtLog1 = New System.Diagnostics.EventLog()
-        Me.tmrSync = New System.Windows.Forms.Timer(Me.components)
         CType(Me.evtLog1, System.ComponentModel.ISupportInitialize).BeginInit()
-        '
-        'tmrSync
-        '
-        Me.tmrSync.Enabled = True
-        Me.tmrSync.Interval = 60000
         '
         'BellminderTimeSync
         '
@@ -59,5 +52,4 @@ Partial Class BellminderTimeSync
     End Sub
 
     Friend WithEvents evtLog1 As EventLog
-    Friend WithEvents tmrSync As Windows.Forms.Timer
 End Class

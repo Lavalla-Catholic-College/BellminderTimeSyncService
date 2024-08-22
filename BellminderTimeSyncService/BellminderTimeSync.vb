@@ -1,6 +1,7 @@
 ﻿Imports System.IO.Ports
 Imports System.Diagnostics
 Imports Microsoft.Win32
+Imports System.Threading
 
 Public Class BellminderTimeSync
 
@@ -10,6 +11,7 @@ Public Class BellminderTimeSync
     Private comPort As Integer
     Private baudRate As Integer
     Private interval As Integer
+    Private timer As Timer
 
     Protected Overrides Sub OnStart(ByVal args() As String)
         ' Add code here to start your service. This method should set things
@@ -24,18 +26,24 @@ Public Class BellminderTimeSync
 
         comPort = LoadSettings().comPort
         baudRate = LoadSettings().baudRate
-        tmrSync.Interval = LoadSettings().interval
+        interval = LoadSettings().interval
 
         WriteLog(String.Format("Started Bellminder Time Sync. COM port is {0} and baud rate is {1} with a refresh rate of {2}", comPort, baudRate, tmrSync.Interval), EventLogEntryType.Information)
 
-        tmrSync.Start()
+        ' Initialize the timer to fire every 10 minutes (600000 milliseconds)
+        Dim callback As New TimerCallback(AddressOf TimerElapsed)
+        timer = New Timer(callback, Nothing, 0, interval)
 
         SendTimeDate()
 
     End Sub
 
     Protected Overrides Sub OnStop()
-        ' Add code here to perform any tear-down necessary to stop your service.
+        ' Stop the timer
+        If timer IsNot Nothing Then
+            timer.Dispose()
+            timer = Nothing
+        End If
     End Sub
 
     Public Sub SendHexDataToSerialPort(portName As String, baudRate As Integer, dataToSend As Byte(), Optional KeepOpen As Boolean = False)
@@ -136,8 +144,8 @@ Public Class BellminderTimeSync
     Public Sub GetCurrentTime()
         ' 1B 58
     End Sub
-
-    Private Sub tmrSync_Tick(sender As Object, e As EventArgs) Handles tmrSync.Tick
+    Private Sub TimerElapsed(state As Object)
+        ' Call the SendTimeDate method every time the timer fires
         SendTimeDate()
     End Sub
 
